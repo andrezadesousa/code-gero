@@ -9,21 +9,18 @@ const privateKey = "e62acce1ece713356cbaf2c96f9ed45ce3ee3194";
 export const getCharacters = async (
   limit: number = 20,
   offset: number = 0
-): Promise<Character[]> => {
+): Promise<{ results: Character[]; total: number }> => {
   const ts = new Date().getTime().toString();
   const hash = md5(ts + privateKey + publicKey).toString();
 
   const res = await axios.get(`${baseURL}/characters`, {
-    params: {
-      ts,
-      apikey: publicKey,
-      hash,
-      limit,
-      offset,
-    },
+    params: { ts, apikey: publicKey, hash, limit, offset },
   });
 
-  return res.data.data.results as Character[];
+  return {
+    results: res.data.data.results as Character[],
+    total: res.data.data.total,
+  };
 };
 
 export const searchCharacters = async (name: string): Promise<Character[]> => {
