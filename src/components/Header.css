@@ -1,0 +1,43 @@
+.header {
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header__left {
+  flex: 0 0 auto;
+}
+.header__logo {
+  height: 44px;
+}
+
+.header__right {
+  text-align: right;
+  font-weight: 500;
+}
+
+.header__name {
+  font-size: 16px;
+}
+.header__role {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 600px) {
+  .header__container {
+    flex-direction: row;
+  }
+  .header__right {
+    font-size: 12px;
+  }
+  .header__logo {
+    height: 36px;
+  }
+}
