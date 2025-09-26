@@ -25,3 +25,20 @@ export const getCharacters = async (
 
   return res.data.data.results as Character[];
 };
+
+export const searchCharacters = async (name: string): Promise<Character[]> => {
+  const ts = new Date().getTime().toString();
+  const hash = md5(ts + privateKey + publicKey).toString();
+
+  const res = await axios.get(`${baseURL}/characters`, {
+    params: {
+      ts,
+      apikey: publicKey,
+      hash,
+      nameStartsWith: name,
+      limit: 20,
+    },
+  });
+
+  return res.data.data.results as Character[];
+};
