@@ -1,28 +1,27 @@
 import axios from "axios";
-import CryptoJS from "crypto-js";
+import md5 from "crypto-js/md5";
+import { Character } from "../types";
 
+const baseURL = "https://gateway.marvel.com/v1/public";
 const publicKey = "57f1ab16e82c2f6c364c74cfd7ad9021";
 const privateKey = "e62acce1ece713356cbaf2c96f9ed45ce3ee3194";
-const baseUrl = "https://gateway.marvel.com/v1/public";
 
-export const getCharacters = async () => {
-  const ts = Date.now().toString();
-  const hash = CryptoJS.MD5(ts + privateKey + publicKey).toString();
+export const getCharacters = async (
+  limit: number = 20,
+  offset: number = 0
+): Promise<Character[]> => {
+  const ts = new Date().getTime().toString();
+  const hash = md5(ts + privateKey + publicKey).toString();
 
-  try {
-    const response = await axios.get(`${baseUrl}/characters`, {
-      params: {
-        ts,
-        apikey: publicKey,
-        hash,
-        limit: 1,
-      },
-    });
-    console.log("Resposta da Marvel API:", response.data);
+  const res = await axios.get(`${baseURL}/characters`, {
+    params: {
+      ts,
+      apikey: publicKey,
+      hash,
+      limit,
+      offset,
+    },
+  });
 
-    return response.data.data.results;
-  } catch (error) {
-    console.error("Erro ao buscar personagens", error);
-    return [];
-  }
+  return res.data.data.results as Character[];
 };
