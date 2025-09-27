@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import styled from "styled-components";
 import SkeletonCard from "./SkeletonCard";
 
@@ -6,7 +6,7 @@ interface SkeletonGridProps {
   count?: number;
 }
 
-const SkeletonGrid: React.FC<SkeletonGridProps> = ({ count = 10 }) => {
+const SkeletonGrid = ({ count = 10 }: SkeletonGridProps) => {
   return (
     <Container className="container">
       <Title>Carregando personagens...</Title>

@@ -1,16 +1,7 @@
-import type React from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
 
-const shimmer = keyframes`
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-`;
-
-const SkeletonCard: React.FC = () => {
+const SkeletonCard = () => {
   return (
     <Card>
       <ImageSkeleton />
@@ -25,6 +16,15 @@ const SkeletonCard: React.FC = () => {
 };
 
 export default SkeletonCard;
+
+const shimmer = keyframes`
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+`;
 
 const Card = styled.div`
   background: ${({ theme }) => theme.card};
