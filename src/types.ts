@@ -4,8 +4,9 @@ export interface Thumbnail {
 }
 
 export interface ListItem {
-  resourceURI: string;
   name: string;
+  resourceURI: string;
+  type?: string;
 }
 
 export interface Related {

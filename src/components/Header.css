@@ -30,6 +30,12 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
+.fav-count {
+  margin-left: 12px;
+  font-weight: bold;
+  color: #eb8015;
+}
+
 @media (max-width: 600px) {
   .header__container {
     flex-direction: row;

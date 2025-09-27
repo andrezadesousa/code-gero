@@ -37,5 +37,7 @@ export const searchCharacters = async (name: string): Promise<Character[]> => {
     },
   });
 
+  console.log("API", res);
+
   return res.data.data.results as Character[];
 };
