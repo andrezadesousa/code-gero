@@ -6,6 +6,9 @@ declare module "styled-components" {
     text: string;
     primary: string;
     card: string;
+    accent: string;
+    muted: string;
+    border: string;
   }
 }
 
