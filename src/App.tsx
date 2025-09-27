@@ -4,7 +4,6 @@ import Hero from "./components/Hero";
 import CharacterModal from "./components/CharacterModal";
 import { getCharacters, searchCharacters } from "./services/marvelApi";
 import { Character } from "./types";
-import "./App.css";
 import CharacterCard from "./components/CharacterCard";
 
 const App: React.FC = () => {
