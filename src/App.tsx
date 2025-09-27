@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import CharacterModal from "./components/CharacterModal";
 import { getCharacters, searchCharacters } from "./services/marvelApi";
 import { Character } from "./types";
 import CharacterCard from "./components/CharacterCard";
+import { lightTheme, darkTheme, whiteLabelTheme } from "./themes";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+    transition: all 0.3s ease;
+  }
+
+  button {
+    cursor: pointer;
+  }
+`;
 
 const App: React.FC = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -15,6 +31,8 @@ const App: React.FC = () => {
     null
   );
   const [view, setView] = useState<"all" | "favorites">("all");
+  const [theme, setTheme] = useState<"light" | "dark" | "whiteLabel">("light");
+
   const limit = 10;
 
   const loadCharacters = async (pageNumber: number = 1) => {
@@ -24,7 +42,6 @@ const App: React.FC = () => {
       setCharacters(results);
       setTotal(total);
 
-      // Seleciona thumbnail aleatória apenas se houver
       if (results.length > 0) {
         const validResults = results.filter((c) => c.thumbnail);
         if (validResults.length > 0) {
@@ -39,7 +56,6 @@ const App: React.FC = () => {
   };
 
   const [favorites, setFavorites] = useState<Character[]>(() => {
-    // Carrega favoritos do localStorage
     const saved = localStorage.getItem("favorites");
     return saved ? JSON.parse(saved) : [];
   });
@@ -58,91 +74,102 @@ const App: React.FC = () => {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
-  const displayedCharacters = view === "all" ? characters : favorites; // usa todos os favoritos
-
+  const displayedCharacters = view === "all" ? characters : favorites;
   const totalPages = Math.ceil(total / limit);
 
   useEffect(() => {
     loadCharacters(page);
   }, [page]);
 
+  const themeObject =
+    theme === "light"
+      ? lightTheme
+      : theme === "dark"
+      ? darkTheme
+      : whiteLabelTheme;
+
   return (
-    <div>
-      <Header favoriteCount={favorites.length} />
-      <main>
-        <Hero
-          thumbnailUrl={randomThumb}
-          onSearch={async (name) => {
-            try {
+    <ThemeProvider theme={themeObject}>
+      <GlobalStyle />
+      <div>
+        <Header
+          favoriteCount={favorites.length}
+          themeName={theme}
+          setThemeName={setTheme}
+        />
+
+        <main>
+          <Hero
+            thumbnailUrl={randomThumb}
+            onSearch={async (name) => {
               const results = await searchCharacters(name);
               setCharacters(results);
               setTotal(results.length);
               setPage(1);
-            } catch (e) {
-              console.error(e);
-            }
-          }}
-          onReset={() => loadCharacters(1)}
-        />
-        <div className="tabs">
-          <button
-            className={view === "all" ? "active" : ""}
-            onClick={() => setView("all")}
-          >
-            Todos
-          </button>
-          <button
-            className={view === "favorites" ? "active" : ""}
-            onClick={() => setView("favorites")}
-          >
-            Favoritos ({favorites.length})
-          </button>
-        </div>
+            }}
+            onReset={() => loadCharacters(1)}
+          />
 
-        <section className="container">
-          <h2>Personagens</h2>
-          <div className="grid">
-            {displayedCharacters.map((c) => (
-              <CharacterCard
-                key={c.id}
-                character={c}
-                onViewMore={setSelectedCharacter}
-                isFavorite={favorites.some((fav) => fav.id === c.id)}
-                onToggleFavorite={() => toggleFavorite(c)}
-              />
-            ))}
+          <div className="tabs">
+            <button
+              className={view === "all" ? "active" : ""}
+              onClick={() => setView("all")}
+            >
+              Todos
+            </button>
+            <button
+              className={view === "favorites" ? "active" : ""}
+              onClick={() => setView("favorites")}
+            >
+              Favoritos ({favorites.length})
+            </button>
           </div>
 
-          {view === "all" && (
-            <div className="pagination">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((prev) => prev - 1)}
-              >
-                Anterior
-              </button>
-
-              <span>
-                Página {page} de {totalPages}
-              </span>
-
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
-              >
-                Próxima
-              </button>
+          <section className="container">
+            <h2>Personagens</h2>
+            <div className="grid">
+              {displayedCharacters.map((c) => (
+                <CharacterCard
+                  key={c.id}
+                  character={c}
+                  onViewMore={setSelectedCharacter}
+                  isFavorite={favorites.some((fav) => fav.id === c.id)}
+                  onToggleFavorite={() => toggleFavorite(c)}
+                />
+              ))}
             </div>
-          )}
-        </section>
-      </main>
 
-      <CharacterModal
-        character={selectedCharacter}
-        favorites={favorites} // <-- passar os favoritos
-        onClose={() => setSelectedCharacter(null)}
-      />
-    </div>
+            {view === "all" && (
+              <div className="pagination">
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => prev - 1)}
+                >
+                  Anterior
+                </button>
+
+                <span>
+                  Página {page} de {totalPages}
+                </span>
+
+                <button
+                  disabled={page === totalPages}
+                  onClick={() => setPage((prev) => prev + 1)}
+                >
+                  Próxima
+                </button>
+              </div>
+            )}
+          </section>
+        </main>
+
+        <CharacterModal
+          character={selectedCharacter}
+          favorites={favorites}
+          onClose={() => setSelectedCharacter(null)}
+        />
+      </div>
+    </ThemeProvider>
   );
 };
 

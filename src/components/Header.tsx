@@ -6,10 +6,24 @@ const logoUrl =
   "https://www.objective.com.br/wp-content/uploads/2020/11/logo-2.svg";
 
 interface HeaderProps {
-  favoriteCount: number;
+  favoriteCount?: number;
+  themeName: "light" | "dark" | "whiteLabel";
+  setThemeName: React.Dispatch<
+    React.SetStateAction<"light" | "dark" | "whiteLabel">
+  >;
 }
 
-const Header: React.FC<HeaderProps> = ({ favoriteCount }) => {
+const Header: React.FC<HeaderProps> = ({
+  favoriteCount = 0,
+  themeName,
+  setThemeName,
+}) => {
+  const cycleTheme = () => {
+    if (themeName === "light") setThemeName("dark");
+    else if (themeName === "dark") setThemeName("whiteLabel");
+    else setThemeName("light");
+  };
+
   return (
     <HeaderWrapper
       as={motion.header}
@@ -25,6 +39,9 @@ const Header: React.FC<HeaderProps> = ({ favoriteCount }) => {
           {favoriteCount > 0 && (
             <FavCount>❤️ Favoritos: {favoriteCount}</FavCount>
           )}
+          <ThemeButton onClick={cycleTheme}>
+            {themeName === "light" ? "🌞" : themeName === "dark" ? "🌙" : "🎨"}
+          </ThemeButton>
         </Right>
       </Container>
     </HeaderWrapper>
@@ -33,10 +50,12 @@ const Header: React.FC<HeaderProps> = ({ favoriteCount }) => {
 
 export default Header;
 
+// ---------------- styled-components ----------------
 const HeaderWrapper = styled.header`
-  background: #20232a;
+  background: ${({ theme }) => theme.primary};
   color: #fff;
   padding: 1rem 0;
+  transition: background 0.3s ease;
 `;
 
 const Container = styled.div`
@@ -65,9 +84,24 @@ const Logo = styled.img`
 `;
 
 const FavCount = styled.span`
-  background: #eb8015;
+  background: rgba(0, 0, 0, 0.2);
   padding: 0.3rem 0.6rem;
   border-radius: 8px;
   font-weight: bold;
   font-size: 0.9rem;
+`;
+
+const ThemeButton = styled.button`
+  background: ${({ theme }) => theme.card};
+  color: ${({ theme }) => theme.text};
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;

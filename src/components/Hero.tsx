@@ -1,149 +1,120 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
 interface HeroProps {
   thumbnailUrl: string | null;
   onSearch: (name: string) => void;
   onReset: () => void;
 }
+
 const Hero: React.FC<HeroProps> = ({ thumbnailUrl, onSearch, onReset }) => {
-  const [query, setQuery] = useState("");
-  const [dateTime, setDateTime] = useState("");
+  const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
-    const updateDateTime = () => {
-      const now = new Date();
-      const formatted = now.toLocaleString("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      setDateTime(formatted);
-    };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchText.trim() !== "") {
+      onSearch(searchText.trim());
+    }
+  };
 
-    updateDateTime();
-    const interval = setInterval(updateDateTime, 60 * 1000); // atualiza a cada minuto
-    return () => clearInterval(interval);
-  }, []);
+  const handleReset = () => {
+    setSearchText("");
+    onReset();
+  };
 
   return (
-    <HeroSection
-      as={motion.section}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
+    <HeroWrapper>
       <Left>
-        <h1>Olá, pessoa!</h1>
-        <p>Esse projeto mostra os personagens da Marvel e suas descrições.</p>
+        <Title>Olá, pessoa!</Title>
+        <Description>
+          Esse projeto mostra os personagens da Marvel e suas descrições
+        </Description>
 
-        <h3>Busca de personagens</h3>
-        <SearchContainer>
-          <input
+        <SearchForm onSubmit={handleSubmit}>
+          <SearchInput
             type="text"
-            placeholder="Digite o nome do personagem..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar personagem..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           />
-          {query && (
-            <button
-              onClick={() => {
-                setQuery("");
-                onReset();
-              }}
-            >
+          {searchText && (
+            <ClearBtn type="button" onClick={handleReset}>
               ✖
-            </button>
+            </ClearBtn>
           )}
-          <button onClick={() => onSearch(query)}>Buscar</button>
-        </SearchContainer>
-
-        <DateTime>📅 {dateTime}</DateTime>
+          <SearchButton type="submit">Buscar</SearchButton>
+        </SearchForm>
       </Left>
 
-      <Right>
-        {thumbnailUrl && (
-          <img src={thumbnailUrl} alt="Marvel random character" />
-        )}
-      </Right>
-    </HeroSection>
+      {thumbnailUrl && (
+        <Right>
+          <Thumbnail src={thumbnailUrl} alt="Thumbnail" />
+        </Right>
+      )}
+    </HeroWrapper>
   );
 };
 
 export default Hero;
 
-const HeroSection = styled.section`
+// ---------------- styled-components ----------------
+const HeroWrapper = styled.section`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  background: #f2f0eb;
-  text-align: center;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
-  }
+  flex-wrap: wrap;
+  padding: 2rem;
+  background: ${({ theme }) => theme.card};
 `;
 
 const Left = styled.div`
-  flex: 1;
-  margin-bottom: 2rem;
-
-  h1 {
-    font-size: 2rem;
-    color: #eb8015;
-    margin-bottom: 1rem;
-  }
-
-  p {
-    margin-bottom: 1.5rem;
-  }
+  flex: 1 1 300px;
 `;
 
 const Right = styled.div`
-  flex: 1;
+  flex: 1 1 300px;
   display: flex;
   justify-content: center;
-
-  img {
-    width: 250px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-  }
 `;
 
-const SearchContainer = styled.div`
-  margin-top: 1.5rem;
+const Title = styled.h1`
+  font-size: 2rem;
+`;
+
+const Description = styled.p`
+  margin: 1rem 0 2rem 0;
+`;
+
+const SearchForm = styled.form`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
-  input {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    flex: 1;
-  }
-
-  button {
-    background: #eb8015;
-    border: none;
-    color: white;
-    padding: 0.5rem 0.8rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-  }
 `;
 
-const DateTime = styled.p`
-  font-size: 0.9rem;
-  color: #555;
-  margin-top: 1rem;
+const SearchInput = styled.input`
+  flex: 1;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+`;
+
+const SearchButton = styled.button`
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: #eb8015;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+`;
+
+const ClearBtn = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+`;
+
+const Thumbnail = styled.img`
+  max-width: 250px;
+  border-radius: 12px;
 `;
