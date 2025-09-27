@@ -1,11 +1,13 @@
+// App.tsx
 import React, { useEffect, useState } from "react";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import CharacterModal from "./components/CharacterModal";
+import CharacterCard from "./components/CharacterCard";
+import Footer from "./components/Footer";
 import { getCharacters, searchCharacters } from "./services/marvelApi";
 import { Character } from "./types";
-import CharacterCard from "./components/CharacterCard";
 import { lightTheme, darkTheme, whiteLabelTheme } from "./themes";
 
 const GlobalStyle = createGlobalStyle`
@@ -31,6 +33,10 @@ const App: React.FC = () => {
     null
   );
   const [view, setView] = useState<"all" | "favorites">("all");
+  const [favorites, setFavorites] = useState<Character[]>(() => {
+    const saved = localStorage.getItem("favorites");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [theme, setTheme] = useState<"light" | "dark" | "whiteLabel">("light");
 
   const limit = 10;
@@ -42,34 +48,22 @@ const App: React.FC = () => {
       setCharacters(results);
       setTotal(total);
 
-      if (results.length > 0) {
-        const validResults = results.filter((c) => c.thumbnail);
-        if (validResults.length > 0) {
-          const idx = Math.floor(Math.random() * validResults.length);
-          const c = validResults[idx];
-          setRandomThumb(`${c.thumbnail.path}.${c.thumbnail.extension}`);
-        }
+      const validResults = results.filter((c) => c.thumbnail);
+      if (validResults.length > 0) {
+        const idx = Math.floor(Math.random() * validResults.length);
+        const c = validResults[idx];
+        setRandomThumb(`${c.thumbnail.path}.${c.thumbnail.extension}`);
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  const [favorites, setFavorites] = useState<Character[]>(() => {
-    const saved = localStorage.getItem("favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
-
   const toggleFavorite = (character: Character) => {
-    let updated: Character[];
     const exists = favorites.find((fav) => fav.id === character.id);
-
-    if (exists) {
-      updated = favorites.filter((fav) => fav.id !== character.id);
-    } else {
-      updated = [...favorites, character];
-    }
-
+    const updated = exists
+      ? favorites.filter((fav) => fav.id !== character.id)
+      : [...favorites, character];
     setFavorites(updated);
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
@@ -91,84 +85,78 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={themeObject}>
       <GlobalStyle />
-      <div>
-        <Header
-          favoriteCount={favorites.length}
-          themeName={theme}
-          setThemeName={setTheme}
+      <Header
+        favoriteCount={favorites.length}
+        themeName={theme}
+        setThemeName={setTheme}
+      />
+      <main>
+        <Hero
+          thumbnailUrl={randomThumb}
+          onSearch={async (name) => {
+            const results = await searchCharacters(name);
+            setCharacters(results);
+            setTotal(results.length);
+            setPage(1);
+          }}
+          onReset={() => loadCharacters(1)}
         />
 
-        <main>
-          <Hero
-            thumbnailUrl={randomThumb}
-            onSearch={async (name) => {
-              const results = await searchCharacters(name);
-              setCharacters(results);
-              setTotal(results.length);
-              setPage(1);
-            }}
-            onReset={() => loadCharacters(1)}
-          />
+        <div className="tabs">
+          <button
+            className={view === "all" ? "active" : ""}
+            onClick={() => setView("all")}
+          >
+            Todos
+          </button>
+          <button
+            className={view === "favorites" ? "active" : ""}
+            onClick={() => setView("favorites")}
+          >
+            Favoritos ({favorites.length})
+          </button>
+        </div>
 
-          <div className="tabs">
-            <button
-              className={view === "all" ? "active" : ""}
-              onClick={() => setView("all")}
-            >
-              Todos
-            </button>
-            <button
-              className={view === "favorites" ? "active" : ""}
-              onClick={() => setView("favorites")}
-            >
-              Favoritos ({favorites.length})
-            </button>
+        <section className="container">
+          <h2>Personagens</h2>
+          <div className="grid">
+            {displayedCharacters.map((c) => (
+              <CharacterCard
+                key={c.id}
+                character={c}
+                isFavorite={favorites.some((fav) => fav.id === c.id)}
+                onToggleFavorite={() => toggleFavorite(c)}
+                onViewMore={setSelectedCharacter}
+              />
+            ))}
           </div>
 
-          <section className="container">
-            <h2>Personagens</h2>
-            <div className="grid">
-              {displayedCharacters.map((c) => (
-                <CharacterCard
-                  key={c.id}
-                  character={c}
-                  onViewMore={setSelectedCharacter}
-                  isFavorite={favorites.some((fav) => fav.id === c.id)}
-                  onToggleFavorite={() => toggleFavorite(c)}
-                />
-              ))}
+          {view === "all" && (
+            <div className="pagination">
+              <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Anterior
+              </button>
+              <span>
+                Página {page} de {totalPages}
+              </span>
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+              >
+                Próxima
+              </button>
             </div>
+          )}
+        </section>
+      </main>
 
-            {view === "all" && (
-              <div className="pagination">
-                <button
-                  disabled={page === 1}
-                  onClick={() => setPage((prev) => prev - 1)}
-                >
-                  Anterior
-                </button>
+      <CharacterModal
+        character={selectedCharacter}
+        favorites={favorites}
+        onClose={() => setSelectedCharacter(null)}
+      />
 
-                <span>
-                  Página {page} de {totalPages}
-                </span>
-
-                <button
-                  disabled={page === totalPages}
-                  onClick={() => setPage((prev) => prev + 1)}
-                >
-                  Próxima
-                </button>
-              </div>
-            )}
-          </section>
-        </main>
-
-        <CharacterModal
-          character={selectedCharacter}
-          favorites={favorites}
-          onClose={() => setSelectedCharacter(null)}
-        />
-      </div>
+      <Footer />
     </ThemeProvider>
   );
 };

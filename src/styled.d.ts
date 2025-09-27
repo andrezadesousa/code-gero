@@ -8,3 +8,8 @@ declare module "styled-components" {
     card: string;
   }
 }
+
+declare module "*.png" {
+  const value: string;
+  export default value;
+}

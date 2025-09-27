@@ -25,10 +25,8 @@ const Hero: React.FC<HeroProps> = ({ thumbnailUrl, onSearch, onReset }) => {
   return (
     <HeroWrapper>
       <Left>
-        <Title>Olá, pessoa!</Title>
-        <Description>
-          Esse projeto mostra os personagens da Marvel e suas descrições
-        </Description>
+        <Title>Hey, time!</Title>
+        <Description>Assemble Your Artistic Forces</Description>
 
         <SearchForm onSubmit={handleSubmit}>
           <SearchInput
@@ -44,20 +42,22 @@ const Hero: React.FC<HeroProps> = ({ thumbnailUrl, onSearch, onReset }) => {
           )}
           <SearchButton type="submit">Buscar</SearchButton>
         </SearchForm>
+        <Description>
+          Forge friendships, showcase your talents, and propel your artistic
+          journey in a supportive universe for Marvel enthusiasts.
+        </Description>
+        <a>Join Community</a>
       </Left>
 
-      {thumbnailUrl && (
-        <Right>
-          <Thumbnail src={thumbnailUrl} alt="Thumbnail" />
-        </Right>
-      )}
+      <Right>
+        <Thumbnail src="/assets/hero.png" alt="Thumbnail" />
+      </Right>
     </HeroWrapper>
   );
 };
 
 export default Hero;
 
-// ---------------- styled-components ----------------
 const HeroWrapper = styled.section`
   display: flex;
   justify-content: space-between;
