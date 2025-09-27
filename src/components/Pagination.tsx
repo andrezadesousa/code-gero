@@ -9,16 +9,16 @@ interface PaginationProps {
   disabled?: boolean;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
   disabled = false,
-}) => {
+}: PaginationProps) => {
   const getVisiblePages = () => {
     const delta = 2;
-    const range = [];
-    const rangeWithDots = [];
+    const range: number[] = [];
+    const rangeWithDots: (number | "...")[] = [];
 
     for (
       let i = Math.max(2, currentPage - delta);
@@ -61,27 +61,22 @@ const Pagination: React.FC<PaginationProps> = ({
       </PaginationButton>
 
       <PageNumbers>
-        {visiblePages.map((page, index) => {
-          if (page === "...") {
-            return <Dots key={`dots-${index}`}>...</Dots>;
-          }
-
-          const pageNumber = page as number;
-          const isActive = pageNumber === currentPage;
-
-          return (
+        {visiblePages.map((page, index) =>
+          page === "..." ? (
+            <Dots key={`dots-${index}`}>...</Dots>
+          ) : (
             <PageButton
-              key={pageNumber}
-              onClick={() => onPageChange(pageNumber)}
+              key={page}
+              onClick={() => onPageChange(page)}
               disabled={disabled}
-              $isActive={isActive}
+              $isActive={page === currentPage}
               whileHover={{ scale: disabled ? 1 : 1.1 }}
               whileTap={{ scale: disabled ? 1 : 0.9 }}
             >
-              {pageNumber}
+              {page}
             </PageButton>
-          );
-        })}
+          )
+        )}
       </PageNumbers>
 
       <PaginationButton
@@ -179,8 +174,7 @@ const PageButton = styled(motion.button)<{ $isActive: boolean }>`
   justify-content: center;
 
   &:hover:not(:disabled) {
-    background: ${({ $isActive, theme }) =>
-      $isActive ? theme.primary : theme.primary};
+    background: ${({ $isActive, theme }) => theme.primary};
     color: #ffffff;
     border-color: ${({ theme }) => theme.primary};
     transform: translateY(-1px);
