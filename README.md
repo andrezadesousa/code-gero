@@ -15,6 +15,17 @@ This pull request introduces the initial setup and several enhancements for the 
 
 ![Marvel App Demo](https://github.com/andrezadesousa/code-hero/blob/master/public/assets/demo.gif)
 
+## :gear: Setup
+
+To run the project locally, follow these steps:
+
+```bash
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
+```
 
 ## :gear: How to test
 
