@@ -1,5 +1,3 @@
-<!-- I SWEAR I WILL NOT DELETE ANY OF THE ITEMS BELOW AND WILL FILL THEM CORRECTLY -->
-
 # :scroll: Description
 
 This pull request introduces the initial setup and several enhancements for the Marvel project, including API integration, UI components, and theming.
@@ -15,6 +13,9 @@ This pull request introduces the initial setup and several enhancements for the 
 - Refactor and organize files: styled themes, types, and unused files removed  
 - Favicon and image assets added  
 
+![Marvel App Demo](https://github.com/andrezadesousa/code-hero/blob/master/public/assets/demo.gif)
+
+
 ## :gear: How to test
 
 1. Run the application locally (`npm start` or `yarn start`).  
@@ -25,7 +26,6 @@ This pull request introduces the initial setup and several enhancements for the 
 6. Confirm that skeleton loaders appear while fetching data.  
 7. Validate API calls using Marvel API and ensure data is displayed correctly.  
 8. Check the app layout and styling consistency across pages.  
-
 
 ## :notebook: Checklist
 
