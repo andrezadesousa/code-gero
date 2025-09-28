@@ -165,7 +165,6 @@ const Card = styled.div<{ $isHovered: boolean }>`
     opacity: 1;
   }
 
-  /* Mobile-specific hover effects disabled on touch devices */
   @media (hover: none) and (pointer: coarse) {
     opacity: 1;
     transform: scale(1);

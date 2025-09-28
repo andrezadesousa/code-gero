@@ -18,7 +18,7 @@ const CharacterModal = ({
   const isFavorite = favorites.some((fav) => fav.id === character.id);
   const thumbnailUrl = character.thumbnail
     ? `${character.thumbnail.path}.${character.thumbnail.extension}`
-    : "https://via.placeholder.com/150";
+    : "/assets/footer.png";
 
   return (
     <Overlay
@@ -193,7 +193,6 @@ const Modal = styled(motion.div)`
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   border: 1px solid ${({ theme }) => theme.border};
 
-  /* Mobile-specific modal styling */
   @media (max-width: 768px) {
     max-width: 95vw;
     max-height: 95vh;
