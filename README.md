@@ -1,46 +1,38 @@
-# Getting Started with Create React App
+<!-- I SWEAR I WILL NOT DELETE ANY OF THE ITEMS BELOW AND WILL FILL THEM CORRECTLY -->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# :scroll: Description
 
-## Available Scripts
+This pull request introduces the initial setup and several enhancements for the Marvel project, including API integration, UI components, and theming.
 
-In the project directory, you can run:
+- Project initialized with Create React App  
+- Axios and CryptoJS added for API requests  
+- Marvel API integration implemented, including character listing and search functionality  
+- Components added: Hero, Header (with dark/light mode), Footer, CharacterGrid, CharacterCard, CharacterModal, Pagination, Skeletons  
+- Styled-components used for styling throughout the app  
+- Framer Motion added for animations  
+- TypeScript typings added for various components and API calls  
+- Loading and theme button functionalities implemented  
+- Refactor and organize files: styled themes, types, and unused files removed  
+- Favicon and image assets added  
 
-### `npm start`
+## :gear: How to test
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Run the application locally (`npm start` or `yarn start`).  
+2. Verify that the Hero, Header, Footer, and Pagination components render correctly.  
+3. Check the character listing and search functionality.  
+4. Open a CharacterModal to see detailed character information.  
+5. Test dark/light mode toggle in the header.  
+6. Confirm that skeleton loaders appear while fetching data.  
+7. Validate API calls using Marvel API and ensure data is displayed correctly.  
+8. Check the app layout and styling consistency across pages.  
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+## :notebook: Checklist
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [x] Fill a Title for this PR that explains the source, following the format [`<type>[optional scope]: <description>`](https://www.conventionalcommits.org/). e.g., `feat(marvel-app): initial project setup and character listing`
+- [x] I have performed a self-review of my code
+- [ ] I have mapped out all the debts that I can't resolve in this PR and linked them here
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [x] New and existing unit tests from changed files pass locally with my changes
+- [ ] If new environment variables are necessary, they were already added to Production secrets
+- [ ] If new tables or table changes are necessary they were already migrated to the Production
