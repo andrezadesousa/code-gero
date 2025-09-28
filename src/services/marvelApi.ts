@@ -5,8 +5,8 @@ import { Character } from "../types";
 const baseURL = "https://gateway.marvel.com/v1/public";
 
 // Minhas chaves da Marvel (public e private)
-const publicKey = process.env.REACT_APP_MARVEL_PUBLIC_KEY!;
-const privateKey = process.env.REACT_APP_MARVEL_PRIVATE_KEY!;
+const publicKey = "57f1ab16e82c2f6c364c74cfd7ad9021";
+const privateKey = "e62acce1ece713356cbaf2c96f9ed45ce3ee3194";
 
 // Pega a lista dos personagens
 export const getCharacters = async (
