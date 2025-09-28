@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sun, Moon, Palette, Heart } from "lucide-react";
 
 const logoUrl =
   "https://www.objective.com.br/wp-content/uploads/2020/11/logo-2.svg";
@@ -57,6 +58,19 @@ const Header = ({
     setShowColorPicker(false);
   };
 
+  const getThemeIcon = () => {
+    switch (themeName) {
+      case "light":
+        return <Sun size={20} />;
+      case "dark":
+        return <Moon size={20} />;
+      case "whiteLabel":
+        return <Palette size={20} />;
+      default:
+        return <Sun size={20} />;
+    }
+  };
+
   return (
     <HeaderWrapper
       as={motion.header}
@@ -69,15 +83,15 @@ const Header = ({
         </Left>
         <Right>
           <HeaderText>Andreza Sousa - Teste de Front-end</HeaderText>
-          {favoriteCount > 0 && <FavCount>❤️ {favoriteCount}</FavCount>}
+          {favoriteCount > 0 && (
+            <FavCount>
+              <Heart size={16} fill="currentColor" /> {favoriteCount}
+            </FavCount>
+          )}
 
           <ThemeContainer>
             <ThemeButton onClick={() => setShowThemeMenu(!showThemeMenu)}>
-              {themeName === "light"
-                ? "🌞"
-                : themeName === "dark"
-                ? "🌙"
-                : "🎨"}
+              {getThemeIcon()}
             </ThemeButton>
 
             <AnimatePresence>
@@ -90,13 +104,13 @@ const Header = ({
                   transition={{ duration: 0.2 }}
                 >
                   <ThemeOption onClick={() => handleThemeSelect("light")}>
-                    🌞 Light Mode
+                    <Sun size={16} /> Light Mode
                   </ThemeOption>
                   <ThemeOption onClick={() => handleThemeSelect("dark")}>
-                    🌙 Dark Mode
+                    <Moon size={16} /> Dark Mode
                   </ThemeOption>
                   <ThemeOption onClick={() => handleThemeSelect("whiteLabel")}>
-                    🎨 White Label
+                    <Palette size={16} /> White Label
                   </ThemeOption>
                 </ThemeMenu>
               )}
@@ -261,6 +275,9 @@ const FavCount = styled.span`
   font-weight: 700;
   font-size: 0.9rem;
   border: 1px solid rgba(240, 20, 30, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
   @media (max-width: 768px) {
     padding: 0.3rem 0.6rem;
@@ -275,7 +292,6 @@ const ThemeButton = styled.button`
   padding: 0.5rem;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1.2rem;
   transition: all 0.3s ease;
   font-weight: 600;
   width: 44px;
@@ -292,7 +308,6 @@ const ThemeButton = styled.button`
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;
-    font-size: 1.1rem;
   }
 `;
 
