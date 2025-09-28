@@ -50,3 +50,7 @@ export const whiteLabelTheme = {
   primary: "#8a2be2",
   card: "#e6e6fa",
 };
+
+export type FormEventHandler = (
+  e: Event & { currentTarget: HTMLFormElement }
+) => void;
